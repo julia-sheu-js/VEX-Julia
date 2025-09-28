@@ -144,6 +144,27 @@ int drivePID(){
     
 
 }
+-----------------------------example of task--------------------------------
+// int intakeTask(){
+    //while(true){
+        //Intake.spin(forward);
+        //wait(20,msec);
+    //}
+    //return 0;
+
+//}
+//task intake(intakeTask);
+
+//int main(){
+    //Drivetrain.drive(forward);
+    //wait(3,seconds);
+    //Drivetrain.stop();
+    //intake.stop();
+    //Intake.stop();
+//}
+
+--------------------------------AUTON------------------------------------
+
 
 void autonomous(void) {
     enableDrivePID = true;
