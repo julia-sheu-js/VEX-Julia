@@ -98,11 +98,11 @@ int drivePID(){
     while(enableDrivePID){
         if (resetDriveSensors){
             resetDriveSensors = false;
-            leftMotor.setPosition(0,degrees)
-            rightMotor.setPosition(0,degrees)
+            leftWheels.setPosition(0,degrees)
+            rightWheels.setPosition(0,degrees)
         }
-        int leftMotorPosition = leftMotor.position(degrees);
-        int rightMotorPosition = rightMotor.position(degrees);
+        int leftMotorPosition = leftWheels.position(degrees);
+        int rightMotorPosition = rightWheels.position(degrees);
         //////////////////////////////////////////////////////
         //lateral movement PID
         //////////////////////////////////////////////////////
