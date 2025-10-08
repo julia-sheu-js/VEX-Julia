@@ -106,7 +106,7 @@ int drivePID(){
         //////////////////////////////////////////////////////
         //lateral movement PID
         //////////////////////////////////////////////////////
-        int avgPosition = -(leftMotorposition + rightMotorPosition)/2;
+        int avgPosition = -(leftMotorPosition + rightMotorPosition)/2;
         
         error = avgPosition - desiredValue;
         derivative = error - prevError;
@@ -119,7 +119,7 @@ int drivePID(){
         //////////////////////////////////////////////////////
         //turning movement PID
         //////////////////////////////////////////////////////
-        int turnDiff = leftMotorposition - rightMotorPosition;
+        int turnDiff = leftMotorPosition - rightMotorPosition;
         
         turnError = turnDiff - desiredTurnValue;
         turnDerivative = turnError - turnPrevError;
@@ -144,7 +144,7 @@ int drivePID(){
     
 
 }
------------------------------example of task--------------------------------
+//-----------------------------example of task--------------------------------
 // int intakeTask(){
     //while(true){
         //Intake.spin(forward);
@@ -163,12 +163,13 @@ int drivePID(){
     //Intake.stop();
 //}
 
---------------------------------AUTON------------------------------------
+//--------------------------------AUTON------------------------------------
 
 
-void autonomous(void) {
+void autonomous(void) 
+{
     enableDrivePID = true;
-    vex::task PIDmod(drivePID);
+    vex::task:: PIDmod(drivePID);
     resetDriveSensors = true; 
     desiredValue = 300;
     desiredTurnValue = 600;
@@ -218,13 +219,13 @@ void usercontrol(void) {
         // This gives more precision at low speeds
         if (leftY != 0) {
             leftY = (leftY > 0) ? 
-                0.1 * leftY + 0.9 * pow(leftY, 2) / 100.0 :
-                0.1 * leftY - 0.9 * pow(leftY, 2) / 100.0;
+                0.1 * leftY + 0.9 * std::pow(leftY, 2.0) / 100.0 :
+                0.1 * leftY - 0.9 * std::pow(leftY, 2.0) / 100.0;
         }
         if (rightY != 0) {
             rightY = (rightY > 0) ? 
-                0.1 * rightY + 0.9 * pow(rightY, 2) / 100.0 :
-                0.1 * rightY - 0.9 * pow(rightY, 2) / 100.0;
+                0.1 * rightY + 0.9 * std::pow(rightY, 2.0) / 100.0 :
+                0.1 * rightY - 0.9 * std::pow(rightY, 2.0) / 100.0;
         }
         
         // Only update motors if joystick values changed significantly
