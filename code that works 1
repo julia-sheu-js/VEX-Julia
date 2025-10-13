@@ -1,3 +1,4 @@
+
 /*----------------------------------------------------------------------------*/
 /*                                                                            */
 /*    Module:       main.cpp                                                  */
@@ -24,7 +25,7 @@ motor frontLeft = motor(PORT4, false);    // Left side - not reversed
 motor backLeft = motor(PORT1, false);     // Left side - not reversed
 motor frontRight = motor(PORT3, true);    // Right side - reversed
 motor backRight = motor(PORT2, true);     // Right side - reversed
-
+motor Intake = motor(PORT5, false);
 // Motor groups for easier control
 motor_group leftWheels(frontLeft, backLeft);
 motor_group rightWheels(frontRight, backRight);
@@ -202,7 +203,15 @@ void usercontrol(void) {
                 0.1 * rightY + 0.9 * pow(rightY, 2) / 100.0 :
                 0.1 * rightY - 0.9 * pow(rightY, 2) / 100.0;
         }
-        
+        if (Controller1.ButtonR1.pressing()){
+          Intake.spin(foward, 100,percent);
+        }
+        else if (Controller1.ButtonR2.pressing()){
+          Intake.spin(reverse, 100,percent);
+        }
+        else {
+          Intake.stop();
+        }
         // // Only update motors if joystick values changed significantly
         // if (abs(leftY - prevLeftY) > 2 || abs(rightY - prevRightY) > 2) {
         //     leftWheels.setVelocity(leftY, percent);
