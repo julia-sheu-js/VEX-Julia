@@ -21,15 +21,17 @@ brain Brain;
 controller Controller1;
 
 // Motor definitions - set reversal once here
-motor frontLeft = motor(PORT4, false);    // Left side - not reversed
+motor frontLeft = motor(PORT4, false);
+motor midLeft = motor(PORT3, false);   // Left side - not reversed
 motor backLeft = motor(PORT1, false);     // Left side - not reversed
-motor frontRight = motor(PORT3, true);    // Right side - reversed
+motor frontRight = motor(PORT3, true);
+motor midRight = motor(PORT6,true);
 motor backRight = motor(PORT2, true);     // Right side - reversed
-motor Intake = motor(PORT5, false);
+
 // Motor groups for easier control
-motor_group leftWheels(frontLeft, backLeft);
-motor_group rightWheels(frontRight, backRight);
-motor_group all(frontLeft, backLeft, frontRight, backRight);
+motor_group leftWheels(frontLeft, midLeft, backLeft);
+motor_group rightWheels(frontRight, midRight, backRight);
+motor_group all(frontLeft,midLeft, backLeft, frontRight, midRight, backRight);
 
 // Function to drive straight forward/backward
 void vert(double velocity, double rotations) {
