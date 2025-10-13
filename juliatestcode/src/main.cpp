@@ -1,9 +1,10 @@
+
 /*----------------------------------------------------------------------------*/
 /*                                                                            */
 /*    Module:       main.cpp                                                  */
 /*    Author:       juliamacbook                                              */
 /*    Created:      9/10/2025, 4:59:41 PM                                     */
-/*    Description:  V5 project - Corrected Tank Drive                        */
+/*    Descripti on:  V5 projmect - Corrected Tank Drive                        */
 /*                                                                            */
 /*----------------------------------------------------------------------------*/
 
@@ -20,16 +21,17 @@ brain Brain;
 controller Controller1;
 
 // Motor definitions - set reversal once here
-motor frontLeft = motor(PORT4, false);    // Left side - not reversed
+motor frontLeft = motor(PORT4, false);
+motor midLeft = motor(PORT3, false);   // Left side - not reversed
 motor backLeft = motor(PORT1, false);     // Left side - not reversed
-motor frontRight = motor(PORT3, true);    // Right side - reversed
-motor backRight = motor(PORT2, true);     // Right side - reversed
-
+motor frontRight = motor(PORT3, true);
+motor midRight = motor(PORT6,true);
+motor backRight = motor(PORT2, true);     // Right side - reve   // Right side - reversed
+motor Intake = motor(PORT5, false);
 // Motor groups for easier control
-motor_group leftWheels(frontLeft, backLeft);
-motor_group rightWheels(frontRight, backRight);
-motor_group all(frontLeft, backLeft, frontRight, backRight);
-
+motor_group leftWheels(frontLeft, midLeft, backLeft);
+motor_group rightWheels(frontRight, midRight, backRight);
+motor_group all(frontLeft,midLeft, backLeft, frontRight, midRight, backRight);
 // Function to drive straight forward/backward
 void vert(double velocity, double rotations) {
     all.setVelocity(velocity, percent);
@@ -70,7 +72,6 @@ void pre_auton(void) {
 /*---------------------------------------------------------------------------*/
 /*                              Autonomous Task                              */
 /*---------------------------------------------------------------------------*/
-// settings
 double kP = 0.0;
 double kI = 0.0;
 double kD = 0.0;
@@ -93,21 +94,22 @@ int turnTotalError = 0; //totalError = totalError + error
 bool resetDriveSensors = false;
 
 bool enableDrivePID = true;
+int avgPosition;
 
 int drivePID(){
     while(enableDrivePID){
         if (resetDriveSensors){
             resetDriveSensors = false;
-            leftWheels.setPosition(0,degrees)
-            rightWheels.setPosition(0,degrees)
+            leftWheels.setPosition(0,degrees);
+            rightWheels.setPosition(0,degrees);
         }
         int leftMotorPosition = leftWheels.position(degrees);
         int rightMotorPosition = rightWheels.position(degrees);
         //////////////////////////////////////////////////////
         //lateral movement PID
         //////////////////////////////////////////////////////
-        int avgPosition = -(leftMotorPosition + rightMotorPosition)/2;
         
+        avgPosition = -(leftMotorPosition + rightMotorPosition)/2;
         error = avgPosition - desiredValue;
         derivative = error - prevError;
         // velocity-> position -> absement
@@ -135,7 +137,7 @@ int drivePID(){
         // code
         turnPrevError = turnError;
         prevError = error;
-        wait(20, msec);
+        vex::task::sleep(20);
         
     
     }
@@ -144,41 +146,18 @@ int drivePID(){
     
 
 }
-//-----------------------------example of task--------------------------------
-// int intakeTask(){
-    //while(true){
-        //Intake.spin(forward);
-        //wait(20,msec);
-    //}
-    //return 0;
-
-//}
-//task intake(intakeTask);
-
-//int main(){
-    //Drivetrain.drive(forward);
-    //wait(3,seconds);
-    //Drivetrain.stop();
-    //intake.stop();
-    //Intake.stop();
-//}
-
-//--------------------------------AUTON------------------------------------
-
-
-void autonomous(void) 
-{
+void autonomous(void) {
     enableDrivePID = true;
-    vex::task:: PIDmod(drivePID);
+    vex::task PIDmod(drivePID);
     resetDriveSensors = true; 
     desiredValue = 300;
     desiredTurnValue = 600;
     vex::task::sleep(1000);
     
     enableDrivePID = false;
-    PIDmod.stop;
+    PIDmod.stop();
     Controller1.Screen.setCursor(1,1);
-    Controller.Screen.print(desiredValue);
+    Controller1.Screen.print(desiredValue);
     Controller1.Screen.setCursor(2,1);
     Controller1.Screen.print(avgPosition);
     Controller1.Screen.setCursor(3,1);
@@ -192,15 +171,13 @@ void autonomous(void)
     //vert(50, 1);       // Drive forward 1 more rotation
     //stop();
 }
-
 /*---------------------------------------------------------------------------*/
 /*                              User Control Task                            */
 /*---------------------------------------------------------------------------*/
 
 void usercontrol(void) {
-    // Variables to store previous joystick values
-    double prevLeftY = 0;
-    double prevRightY = 0;
+    // Variables to store previous joystick valuessawq  1`12qwsdza
+
     enableDrivePID = false;
     while (1) {
         // Get joystick values
@@ -219,26 +196,34 @@ void usercontrol(void) {
         // This gives more precision at low speeds
         if (leftY != 0) {
             leftY = (leftY > 0) ? 
-                0.1 * leftY + 0.9 * std::pow(leftY, 2.0) / 100.0 :
-                0.1 * leftY - 0.9 * std::pow(leftY, 2.0) / 100.0;
+                0.1 * leftY + 0.9 * pow(leftY, 2) / 100.0 :
+                0.1 * leftY - 0.9 * pow(leftY, 2) / 100.0;
         }
         if (rightY != 0) {
             rightY = (rightY > 0) ? 
-                0.1 * rightY + 0.9 * std::pow(rightY, 2.0) / 100.0 :
-                0.1 * rightY - 0.9 * std::pow(rightY, 2.0) / 100.0;
+                0.1 * rightY + 0.9 * pow(rightY, 2) / 100.0 :
+                0.1 * rightY - 0.9 * pow(rightY, 2) / 100.0;
         }
-        
-        // Only update motors if joystick values changed significantly
-        if (abs(leftY - prevLeftY) > 2 || abs(rightY - prevRightY) > 2) {
-            leftWheels.setVelocity(leftY, percent);
-            rightWheels.setVelocity(rightY, percent);
-            
-            leftWheels.spin(forward);
-            rightWheels.spin(forward);
-            
-            prevLeftY = leftY;
-            prevRightY = rightY;
+        if (Controller1.ButtonR1.pressing()){
+          Intake.spin(foward, 100,percent);
         }
+        else if (Controller1.ButtonR2.pressing()){
+          Intake.spin(reverse, 100,percent);
+        }
+        else {
+          Intake.stop();
+        }
+        // // Only update motors if joystick values changed significantly
+        // if (abs(leftY - prevLeftY) > 2 || abs(rightY - prevRightY) > 2) {
+        //     leftWheels.setVelocity(leftY, percent);
+        //     rightWheels.setVelocity(rightY, percent);
+            
+        //     leftWheels.spin(forward);
+        //     rightWheels.spin(forward);
+            
+        //     prevLeftY = leftY;
+        //     prevRightY = rightY;
+        // }
         
         wait(20, msec); // Prevent wasted resources
     }
