@@ -24,7 +24,7 @@ controller Controller1;
 motor frontLeft = motor(PORT4, false);
 motor midLeft = motor(PORT3, false);   // Left side - not reversed
 motor backLeft = motor(PORT1, false);     // Left side - not reversed
-motor frontRight = motor(PORT3, true);
+motor frontRight = motor(PORT8, true);
 motor midRight = motor(PORT6,true);
 motor backRight = motor(PORT2, true);     // Right side - reve   // Right side - reversed
 motor Intake = motor(PORT5, false);
